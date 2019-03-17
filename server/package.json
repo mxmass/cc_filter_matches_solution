@@ -1,0 +1,29 @@
+{
+  "name": "fms_api",
+  "version": "1.0.0",
+  "description": "Filtering matches API",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "development": "nodemon server.js",
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Ilya Novikov",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.6"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.14.11",
+    "supertest": "^3.4.2",
+    "tape": "^4.9.2"
+  }
+}
