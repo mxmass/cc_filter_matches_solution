@@ -1,7 +1,6 @@
 const Person = require("./models/persons");
 
-const data = require('./database/matches.json');
-const matches = data.matches;
+const matches = require('./database/matches.json').matches;
 
 if (Array.isArray(matches)) {
   if (matches.length > 0) {
@@ -11,12 +10,10 @@ if (Array.isArray(matches)) {
         age: item.age,
         job_title: item.job_title,
         height_in_cm: item.height_in_cm,
-        city: {
-          name: item.city.name,
-          location: {
-            type : "Point",
-            coordinates: [item.city.lon, item.city.lat]
-          }
+        city: item.city.name,
+        location: {
+          type : "Point",
+          coordinates: [item.city.lon, item.city.lat]
         },
         main_photo: item.main_photo,
         compatibility_score: item.compatibility_score,

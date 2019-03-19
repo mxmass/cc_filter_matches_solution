@@ -31,12 +31,10 @@ var PersonSchema = new Schema({
     required: true
   },
   city: {
-    name: {
-      type: String,
-      required: true
-    },
-    location: PointSchema
+    type: String,
+    required: true
   },
+  location: PointSchema,
   main_photo: {
     type: String
   },
@@ -58,7 +56,7 @@ var PersonSchema = new Schema({
   }
 });
 
-PersonSchema.index({ "city.location": "2dsphere"});   // create the geospatial index
+PersonSchema.index({ "location": "2dsphere"});   // create the geospatial index
 
 var Person = mongoose.model("Person", PersonSchema);
 module.exports = Person;
