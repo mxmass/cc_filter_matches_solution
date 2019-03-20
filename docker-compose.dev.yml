@@ -9,7 +9,7 @@ services:
   #     - ./client:/data
   #   environment:
   #     - API_URL=http://localhost:8081/
-  #
+
   server:
     build: ./server
     ports:
@@ -20,6 +20,7 @@ services:
       - mongo-server
     environment:
       - DATABASE_URL=mongo-server:27017
+      - NODE_ENV=development
 
   mongo-server:
     image: mongo
