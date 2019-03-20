@@ -10,53 +10,56 @@ Start container with
 ```
 > docker-compose up
 ```
-by default it'll  start at DEV mode
+by default it'll start at DEV mode
 
 another way
 ```
+> chmod a+x api_dev.sh
 > ./api_dev.sh
 ```
-just don't forget to do "chmod a+x <filename>" for shell scripts
 
+## Backend
 
-## backend
-
-API built using NodeJS, MongoDB
-
-Pretty strait forward express server using bodyParser middleware
-
-Seeding script is inbuilt and run once at first server up
-
-Reason to use MongoDB - it has nice and quick geospatial nearSphere search
+API built using NodeJS, MongoDB\
+Pretty strait forward express server using bodyParser middleware\
+Seeding script is inbuilt and run once at first server up\
+Reason to use MongoDB - it has nice and quick geospatial **$nearSphere** search
 
 API reports at http://localhost:8081
 
 Routes
 ```
 GET   /         returns API welcome message
-POST  /         returns all objects from persons collection IF request body is empty
+POST  /         returns all objects from persons collection
 POST  /filter   actual filter route
+```
+request body could contain:
+```
+hasphoto, incontact, favourite - true || false
+minage, maxage - int
+minheight, maxheight - int
+minscore, maxscore - float
+lng, lat - float
+range - int
 ```
 
 ```
 POST  /clear    service route, cleans collection / test not written though
 ```
 
-### testing
+If db breaks - use **/clean** and **restart** the container for re-seeding
 
-Since it is very small piece of code i didn't split it to keep everything on one screen
+### Testing
 
-What i could do is to wrap limits testing into a functions and run unit test against it,
-
-but it make very little sense since limits check algorithms are different for all given object props and it's not much of code refactoring we could do here ...
-
-So testing here is about the API calls themselves
+I've done some, but enough tests to get understanding of what to test here\
+Unit tests cover helper functions, and integration test cover API calls\
+More to come to get more coverage
 
 running Tests
 ```
+> chmod a+x api_test.sh
 > ./api_test.sh
 ```
-just don't forget to do "chmod a+x <filename>" for shell scripts
 
 ## Frontend
 
