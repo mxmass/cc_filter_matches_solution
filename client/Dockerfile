@@ -1,5 +1,8 @@
 FROM node:carbon
 
+ARG NODE_ENV="development"
+ENV NODE_ENV=${NODE_ENV}
+
 COPY ./docker/entrypoint.sh /entrypoint/
 
 RUN ["chmod", "+x", "entrypoint/entrypoint.sh"]
@@ -7,8 +10,8 @@ RUN ["chmod", "+x", "entrypoint/entrypoint.sh"]
 # Copy or mount node app here
 WORKDIR /data/
 
-EXPOSE 8081
+EXPOSE 8080
 
 ENTRYPOINT ["/entrypoint/entrypoint.sh"]
 
-CMD ["npm", "run", "development"]
+CMD ["npm", "run", "serve"]

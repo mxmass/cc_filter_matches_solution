@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cors = require('cors');
 
 app.use(express.static('.'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined')); // use morgan console logger in dev environment
 }
