@@ -14,8 +14,12 @@ by default it'll start at DEV mode
 
 another way
 ```
-> chmod a+x api_dev.sh
-> ./api_dev.sh
+> chmod a+x *.sh
+> ./dev.sh
+```
+if you'd like to rebuild containers for some reason:
+```
+> ./fresh.sh
 ```
 
 ## Backend
@@ -57,11 +61,10 @@ More to come to get more coverage
 
 running Tests
 ```
-> chmod a+x api_test.sh
 > ./api_test.sh
 ```
 
 ## Frontend
 
-Client Vue, Vuetify
+Client Vue, Vuetify\
 No tests yet (
