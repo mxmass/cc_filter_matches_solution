@@ -36,8 +36,11 @@ Routes
 GET   /         returns API welcome message
 POST  /         returns all objects from persons collection
 POST  /filter   actual filter route
+POST  /clear    service route, cleans collection / test not written though
 ```
-request body could contain:
+If db breaks - use **GET /clean** and **restart** the container for re-seeding
+
+The **request.body** for **/filter** route could contain:
 ```
 hasphoto, incontact, favourite - true || false
 minage, maxage - int
@@ -46,12 +49,6 @@ minscore, maxscore - float
 lng, lat - float
 range - int
 ```
-
-```
-POST  /clear    service route, cleans collection / test not written though
-```
-
-If db breaks - use **GET /clean** and **restart** the container for re-seeding
 
 ### Testing
 
@@ -66,10 +63,12 @@ running Tests
 
 ## Frontend
 
-Nothing to describe really - code is pretty obvious )\
-App has 3 components: Form, User and List realized just with the original Vue reactivity (no VUEX)\
-and i used Vuetify to make interface a bit human friendly\
+App reports at http://localhost:8080
 
-The only tricky part was to force loading different images from the same URI, solved using asyncComputed plugin that adds such a hook to the Vue instance lifecycle\
+Nothing to describe really - interface is intuitive, code is pretty obvious )\
+App has 3 components: Form, User and List realized just with the original Vue
+reactivity (no VUEX) and i used Vuetify to make interface human friendly
+
+The only tricky part was to force loading different images from the same URI, solved using asyncComputed plugin that adds such a hook to the Vue instance lifecycle
 
 No tests yet (
