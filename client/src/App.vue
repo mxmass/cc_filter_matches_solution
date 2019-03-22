@@ -20,16 +20,18 @@
                 @performSearch="filterList"
               />
             </div>
-            <div v-else>
-              You should select anchor user to enable filter options
-            </div>
+            <div v-else>You should select anchor user to enable filter options</div>
           </div>
         </v-flex>
         <v-flex
           xs12
           sm5
           md6>
-          <List :items="list" :user="selectedUser" @setUser="setUser" />
+          <List
+            :items="list"
+            :user="selectedUser"
+            @setUser="setUser"
+          />
         </v-flex>
       </v-layout>
     </v-container>
@@ -100,10 +102,11 @@ export default {
     wipeUser() {
       this.selectedUser = {};
       this.retreiveList();
+      this.listCount = 0;
     },
     countList() {
       if (this.list) {
-        this.listCount = this.list.length;
+        this.listCount = this.list.length-1;
       }
     }
   }

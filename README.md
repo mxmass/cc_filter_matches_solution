@@ -69,6 +69,9 @@ Nothing to describe really - interface is intuitive, code is pretty obvious )\
 App has 3 components: Form, User and List realized just with the original Vue
 reactivity (no VUEX) and i used Vuetify to make interface human friendly
 
-The only tricky part was to force loading different images from the same URI, solved using asyncComputed plugin that adds such a hook to the Vue instance lifecycle
+API calls delays simulated by setTimeout to make requests look realistic
+
+The only tricky part was to force loading different images from the same URI, solved
+using asyncComputed plugin that adds such a hook to the Vue instance lifecycle
 
 No tests yet (
