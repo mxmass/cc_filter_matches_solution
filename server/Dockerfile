@@ -11,4 +11,4 @@ EXPOSE 8081
 
 ENTRYPOINT ["/entrypoint/entrypoint.sh"]
 
-CMD ["npm", "run", "development"]
+CMD npm run test || exit 1

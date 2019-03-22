@@ -1,4 +1,4 @@
-const helpers = require('../helpers/limits');
+const helpers = require('../helpers');
 
 describe('Testing limits function', function () {
     describe('#check_limits()', function () {

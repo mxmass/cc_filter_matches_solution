@@ -66,10 +66,10 @@ running Tests
 
 ## Frontend
 
-Client Vue, Vuetify\
 Nothing to describe really - code is pretty obvious )\
-App has 3 components: Form, User and List\
-Reactivity is realized without VUEX, just with the original Vue reactivity model\
-And i used Vuetify to make interface human friendly\
+App has 3 components: Form, User and List realized just with the original Vue reactivity (no VUEX)\
+and i used Vuetify to make interface a bit human friendly\
+
 The only tricky part was to force loading different images from the same URI, solved using asyncComputed plugin that adds such a hook to the Vue instance lifecycle\
+
 No tests yet (

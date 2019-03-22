@@ -1,34 +1,26 @@
 version: "3"
 
 services:
-  client:
-    build: ./client
-    restart: always
-    ports:
-      - 8080:8080
-    volumes:
-      - ./client:/data
-    depends_on:
-      - server
-    environment:
-      - API_URL=http://localhost:8081/
-      - NODE_ENV=development
-
-  server:
+  test_runner:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.test
     build: ./server
     ports:
       - 8081:8081
     volumes:
       - ./server:/data
     depends_on:
-      - mongodb
+      - mongo-server
     environment:
-      - DATABASE_URL=mongodb:27017
-      - NODE_ENV=development
+      - DATABASE_URL=mongo-server:27017
+      - NODE_ENV=test
 
-  mongodb:
+  mongo-server:
     image: mongo
     ports:
       - 27017:27017
     volumes:
       - ./db:/data/db
+    logging:
+      driver: "none"
