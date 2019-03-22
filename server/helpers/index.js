@@ -1,8 +1,15 @@
 module.exports = {
   append_geo: function (LIMITS, lng, lat, range) {
+    /*
+     * appending query with geo range
+     * checking for range limit first, set maxdist to max limit if not given
+     *
+     * LIMITS = { MIN: x, MAX: y }
+     * lng, lat: coordinates (float)
+     * range: max sphere radius (int)
+     */
     let result = false;
-    if (lng && lat && (range || (LIMITS.MIN || LIMITS.MAX))) { // appending query with geo range
-      // checking for range limit first, set maxdist to max limit if not given
+    if (lng && lat && (range || (LIMITS.MIN || LIMITS.MAX))) {
       let maxdist = false;
       const maxRange = parseInt(range);
       if (!LIMITS.MAX && !LIMITS.MIN) {
@@ -40,7 +47,7 @@ module.exports = {
     *                     even if value is not given
     *         over: true if constraint should remain if given value
     *                     is (lower|higher) than according limit value
-    *       }
+    *               }
     */
     const parseFn = (type === 'int') ? parseInt : parseFloat;
     const step = (type === 'int') ? parseFn(1) : parseFn(0.01); // value quantum

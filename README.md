@@ -51,7 +51,7 @@ range - int
 POST  /clear    service route, cleans collection / test not written though
 ```
 
-If db breaks - use **/clean** and **restart** the container for re-seeding
+If db breaks - use **GET /clean** and **restart** the container for re-seeding
 
 ### Testing
 
@@ -67,4 +67,9 @@ running Tests
 ## Frontend
 
 Client Vue, Vuetify\
+Nothing to describe really - code is pretty obvious )\
+App has 3 components: Form, User and List\
+Reactivity is realized without VUEX, just with the original Vue reactivity model\
+And i used Vuetify to make interface human friendly\
+The only tricky part was to force loading different images from the same URI, solved using asyncComputed plugin that adds such a hook to the Vue instance lifecycle\
 No tests yet (

@@ -7,7 +7,6 @@ const MONGO_CONFIG = {
   useNewUrlParser: true
 }
 
-
 mongoose.connect(`mongodb://${DATABASE_URL}/${DATABASE}`, MONGO_CONFIG );
 const db = mongoose.connection;
 
@@ -26,8 +25,9 @@ db.on('error', (error) => {
 });
 
 db.once("open", (callback) => {
-  console.error("MongoDB connection established");
-  // seeding DB if it's empty, if you won't clean collection - it happen once otherwise call "/clean" route and then restart the server
+  console.log("MongoDB connection established");
+  // seeding DB if it's empty, it happen once
+  // if you need to rebuild collection - call "GET /clean" route and restart
   Person.countDocuments({}, (err, cnt) => {
     if (cnt === 0) {
       try {
