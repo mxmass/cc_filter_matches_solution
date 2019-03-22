@@ -4,7 +4,10 @@
       <v-expansion-panel-content
         v-for="(item, idx) in items"
         :key="idx">
-         <template v-slot:header>
+        <template
+          v-if="item._id !== user._id"
+          v-slot:header
+        >
             <v-layout
               align-center
               row
@@ -13,7 +16,7 @@
               @click="setUser(item)"
             >
               <v-flex xs1>
-                <!-- <v-icon dark>mdi-grade</v-icon> -->
+                <v-icon v-if="item.favourite">grade</v-icon>
               </v-flex>
               <v-flex xs6 sm4>
                 <strong v-html="item.display_name"></strong>
@@ -55,10 +58,8 @@
 </template>
 
 <script>
-import Axios from 'axios'
-
 export default {
-  props: ['items'],
+  props: ['items', 'user'],
   methods: {
     setUser(user) {
       this.$emit('setUser', user);

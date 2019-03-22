@@ -7,7 +7,7 @@ const cors = require('cors');
 app.use(express.static('.'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors()); // backend and frontend served at different ports - CORS case
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined')); // use morgan console logger in dev environment
 }
@@ -17,31 +17,40 @@ const Person = require('./models/persons');
 // DB Setup
 
 // SERVER Setup
-app.get('/', (req, res) => res.status(200).send('API is running'));   // just indicates that API server is up and running
-app.post('/', (req, res) => {   // return all persons if request body is empty or direct filter result with combination of fields that have values to compare
+app.get('/', (req, res) => res.status(200).send('API is running'));
+                                // just indicates that API server is up and running
+
+app.post('/', (req, res) => {   // return all persons if request body is empty or
+                                // direct filter result with combination of fields
+                                // that have values to use as search params
   let query = req.body ? req.body : {}
   Person.find( query ).sort({ display_name: 1 }).exec((error, list) => {
     if (error) res.status(400).json(error)
     res.status(200).json(list)
   });
 });
-app.post('/clear', (req, res) => { // service route cleaning the collection
+
+app.get('/clear', (req, res) => { // service route cleaning the collection
   Person.deleteMany({}).exec((error, ret) => {
     if (error) res.status(400).json(error)
     res.status(200).json(ret)
   });
 });
+
 app.post('/filter', (req, res) => { // actual filter route
   let query = {} // compiling query
-  const helpers = require('./helpers/limits');
+  const helpers = require('./helpers');
 
   // checking for boolean filter options
-  if (req.body.hasphoto)  query.main_photo = { $exists : true };   // to be absolutely graceful we should check if http request of the image url should return 200 response )
-  if (req.body.incontact) query.contacts_exchanged = { $exists : true, $gt: 0 };
-  if (req.body.favourite) query.favourite = { $exists : true, $in: ["true", true] };
+  if (req.body.hasphoto === true)  query.main_photo = { $exists : true };  // to be absolutely graceful
+                                                                  // we should check if http request
+                                                                  // of the image url should
+                                                                  // return 200 response )
+  if (req.body.incontact === true) query.contacts_exchanged = { $exists : true, $gt: 0 };
+  if (req.body.favourite === true) query.favourite = { $exists : true, $in: ["true", true] };
 
   query.age = helpers.check_limits( // append query with age
-    { MIN: 17, MAX: 96 },
+    { MIN: 18, MAX: 95 },
     'int',
     {
       value: req.body.minage,
@@ -56,7 +65,7 @@ app.post('/filter', (req, res) => { // actual filter route
   );
 
   query.height_in_cm = helpers.check_limits( // append query with height
-    { MIN: 134, MAX: 211 },
+    { MIN: 135, MAX: 210 },
     'int',
     {
       value: req.body.minheight,
@@ -66,7 +75,7 @@ app.post('/filter', (req, res) => { // actual filter route
     {
       value: req.body.maxheight,
       must: false,
-      over: false
+      over: true
     }
   );
 
@@ -85,24 +94,12 @@ app.post('/filter', (req, res) => { // actual filter route
     }
   );
 
-  if (req.body.lng && req.body.lat) { // appending query with geo range
-    // checking for range limit first, set maxdist to max limit if not given
-    const LIMITS = { MIN: 30000, MAX: 300000 }
-    const range = parseInt(req.body.range);
-
-    let maxdist = (range < LIMITS.MAX) ? range*1000 : LIMITS.MAX;
-    if (maxdist <= LIMITS.MIN) maxdist = LIMITS.MIN;
-
-    query.location = {
-      $near: {
-        $geometry: {
-          type: "Point",
-          coordinates: [req.body.lng, req.body.lat]
-        },
-        $maxDistance: maxdist
-      }
-    }
-  }
+  query.location = helpers.append_geo( // append query with geo point and range
+    { MIN: 30, MAX: 300 },
+    req.body.lng,
+    req.body.lat,
+    req.body.range
+  );
 
   Person.find(query).exec((error, list) => {
     if (error) res.status(400).json(error)

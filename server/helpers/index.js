@@ -1,4 +1,35 @@
 module.exports = {
+  append_geo: function (LIMITS, lng, lat, range) {
+    let result = false;
+    if (lng && lat && (range || (LIMITS.MIN || LIMITS.MAX))) { // appending query with geo range
+      // checking for range limit first, set maxdist to max limit if not given
+      let maxdist = false;
+      const maxRange = parseInt(range);
+      if (!LIMITS.MAX && !LIMITS.MIN) {
+        maxdist = maxRange;
+      } else {
+        if (LIMITS.MAX) {
+           maxdist = (maxRange < LIMITS.MAX) ? maxRange : LIMITS.MAX;
+        }
+        if (LIMITS.MIN) {
+          if (maxdist <= LIMITS.MIN) maxdist = LIMITS.MIN;
+        }
+      }
+      maxdist = maxdist ? maxdist*1000 : false;
+
+      result = {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [lng, lat]
+          },
+          $maxDistance: maxdist
+        }
+      }
+    }
+    return result;
+  },
+
   check_limits: function (LIMITS, type='int', left, right) {
    /*
     * LIMITS = { MIN: x, MAX: y }
@@ -18,7 +49,7 @@ module.exports = {
     const rv = right.value ? parseFn(right.value) : false;
 
     if (lv) {
-      a1 = (lv > LIMITS.MIN) ? lv-step : LIMITS.MIN;
+      a1 = (lv > LIMITS.MIN) ? lv-step : LIMITS.MIN-step;
     } else {
       a1 = left.must ? LIMITS.MIN : false; // set value if no input value given, but "must" is true
     }

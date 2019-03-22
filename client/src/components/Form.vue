@@ -3,16 +3,25 @@
     <v-layout row wrap>
       <v-flex xs12>
         <v-layout row wrap white>
-          <v-flex xs4>
-            <v-checkbox v-model="hasphoto" :label="`With photo`" light></v-checkbox>
+          <v-flex xs3>
+            <v-switch
+              v-model="hasphoto"
+              :label="`With photo`"
+            ></v-switch>
+          </v-flex>
+          <v-flex xs5>
+            <v-switch
+              v-model="incontact"
+              :label="`Contacted to others`"
+            ></v-switch>
           </v-flex>
           <v-flex xs4>
-            <v-checkbox v-model="incontact" :label="`Contacted to others`"></v-checkbox>
+            <v-switch
+              v-model="favourite"
+              :label="`Added to favourites`"
+            ></v-switch>
           </v-flex>
-          <v-flex xs4>
-            <v-checkbox v-model="favourite" :label="`Favourited`"></v-checkbox>
-          </v-flex>
-          <v-flex xs12 sm12 d-flex pa-2>
+          <v-flex xs12 sm12 d-flex pa50>
             <v-slider
               v-model="range"
               thumb-label="always"
@@ -22,7 +31,7 @@
             >
             </v-slider>
           </v-flex>
-          <v-flex xs12 sm12 d-flex pa-2>
+          <v-flex xs12 sm12 d-flex pa50>
             <v-range-slider
               v-model="age"
               thumb-label="always"
@@ -31,7 +40,7 @@
               label="Age"
             ></v-range-slider>
           </v-flex>
-          <v-flex xs12 sm12 d-flex pa-2>
+          <v-flex xs12 sm12 d-flex pa50>
             <v-range-slider
               v-model="height"
               thumb-label="always"
@@ -40,7 +49,7 @@
               label="Height"
             ></v-range-slider>
           </v-flex>
-          <v-flex xs12 sm12 d-flex pa-2>
+          <v-flex xs12 sm12 d-flex pa50>
             <v-range-slider
               v-model="score"
               thumb-label="always"
@@ -51,7 +60,21 @@
             ></v-range-slider>
           </v-flex>
           <v-flex xs12>
-            <v-btn round color="primary" dark @click="performSearch">Search</v-btn>
+            <v-btn
+              round
+              color="primary"
+              dark
+              @click="performSearch"
+            >
+              Search<span v-if="count">&nbsp;&nbsp;({{count}})</span>
+            </v-btn>
+            <v-progress-circular
+              v-if="switchMe"
+              :indeterminate="switchMe"
+              :value="0"
+              size="24"
+              class="ml-2"
+            ></v-progress-circular>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -61,9 +84,9 @@
 
 <script>
 export default {
+  props: ['count', 'switchMe'],
   data() {
     return {
-      sarr: {},
       age: [18, 95],
       age1: 18,
       age2: 95,
@@ -76,12 +99,12 @@ export default {
       range: 300,
       hasphoto: false,
       incontact: false,
-      favourite: false,
+      favourite: false
     }
   },
   methods: {
     performSearch() {
-      this.sarr = {
+      const sarr = {
         range: this.range,
         minage: this.age[0],
         maxage: this.age[1],
@@ -93,11 +116,14 @@ export default {
         incontact: this.incontact,
         favourite: this.favourite
       }
-      this.$emit('performSearch', this.sarr)
+      this.$emit('performSearch', sarr)
     }
   }
 }
 </script>
 
 <style scoped>
+.pa50 {
+  margin: 0 15px;
+}
 </style>

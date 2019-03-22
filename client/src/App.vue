@@ -10,9 +10,15 @@
           md6>
           <div class="sticky">
             <div v-if="selectedUser._id">
-              <User :user="selectedUser" />
-              <i>looking for friends ...</i>
-              <Form @performSearch="filterList" />
+              <User
+                :user="selectedUser"
+                @wipeUser="wipeUser"
+              />
+              <Form
+                :count="listCount"
+                :switchMe="switchMe"
+                @performSearch="filterList"
+              />
             </div>
             <div v-else>
               You should select anchor user to enable filter options
@@ -23,7 +29,7 @@
           xs12
           sm5
           md6>
-          <List :items="list" @setUser="setUser" />
+          <List :items="list" :user="selectedUser" @setUser="setUser" />
         </v-flex>
       </v-layout>
     </v-container>
@@ -49,7 +55,9 @@ export default {
         API_URL: `http://localhost:8081`,
       },
       list: Object,
-      selectedUser: Object
+      selectedUser: Object,
+      listCount: 0,
+      switchMe: false
     }
   },
   mounted() {
@@ -57,7 +65,7 @@ export default {
   },
   methods: {
     errorHandler (error) {
-      console.error(error);
+      console.error(error); // eslint-disable-line no-console
     },
     retreiveList () {         // get initial list
       let route = this.config.API_URL + `/`;
@@ -69,18 +77,34 @@ export default {
       })
     },
     filterList (filter) {     // get filtered list
+      this.switchMe = true;
       filter.lng = this.selectedUser.location.coordinates[0];
       filter.lat = this.selectedUser.location.coordinates[1];
       let route = this.config.API_URL + `/filter`;
       Axios.post(route, filter, {}) // async promise based API call
       .then(({ data }) => {
-        this.list = data
+        setTimeout(this.updateList, 1000, data);
       }).catch(error => {
         this.errorHandler(error);
+        this.switchMe = false;
       })
+    },
+    updateList(data) {
+      this.list = data;
+      this.countList();
+      this.switchMe = false;
     },
     setUser(user) {
       this.selectedUser = user;
+    },
+    wipeUser() {
+      this.selectedUser = {};
+      this.retreiveList();
+    },
+    countList() {
+      if (this.list) {
+        this.listCount = this.list.length;
+      }
     }
   }
 }
@@ -93,7 +117,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .sticky {
   position: -webkit-sticky;
