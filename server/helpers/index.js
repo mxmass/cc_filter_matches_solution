@@ -1,5 +1,6 @@
 module.exports = {
   append_geo: function (LIMITS, lng, lat, range) {
+    console.log(lng, lat);
     /*
      * appending query with geo range
      * checking for range limit first, set maxdist to max limit if not given
@@ -9,7 +10,7 @@ module.exports = {
      * range: max sphere radius (int)
      */
     let result = false;
-    if (lng && lat && (range || (LIMITS.MIN || LIMITS.MAX))) {
+    if ((lng !== undefined) && (lat !== undefined) && (range || (LIMITS.MIN || LIMITS.MAX))) {
       let maxdist = false;
       const maxRange = parseInt(range);
       if (!LIMITS.MAX && !LIMITS.MIN) {

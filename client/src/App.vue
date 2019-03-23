@@ -14,13 +14,14 @@
                 :user="selectedUser"
                 @wipeUser="wipeUser"
               />
-              <Form
-                :count="listCount"
-                :switchMe="switchMe"
-                @performSearch="filterList"
-              />
             </div>
-            <div v-else>You should select anchor user to enable filter options</div>
+            <div v-else>You should select anchor user to enable filter geo-options</div>
+            <Form
+              :count="listCount"
+              :selectedUser="selectedUser"
+              :switchMe="switchMe"
+              @performSearch="filterList"
+            />
           </div>
         </v-flex>
         <v-flex
@@ -80,9 +81,17 @@ export default {
     },
     filterList (filter) {     // get filtered list
       this.switchMe = true;
-      filter.lng = this.selectedUser.location.coordinates[0];
-      filter.lat = this.selectedUser.location.coordinates[1];
       let route = this.config.API_URL + `/filter`;
+      if (this.selectedUser) {
+        if (this.selectedUser.location) {
+          if (Array.isArray(this.selectedUser.location.coordinates)) {
+            if (this.selectedUser.location.coordinates.length > 1) {
+              filter.lng = this.selectedUser.location.coordinates[0];
+              filter.lat = this.selectedUser.location.coordinates[1];
+            }
+          }
+        }
+      }
       Axios.post(route, filter, {}) // async promise based API call
       .then(({ data }) => {
         setTimeout(this.updateList, 1000, data);
@@ -96,8 +105,9 @@ export default {
       this.countList();
       this.switchMe = false;
     },
-    setUser(user) {
-      this.selectedUser = user;
+    setUser(selected) {
+      this.selectedUser = selected;
+      this.resetCount();
     },
     wipeUser() {
       this.selectedUser = {};
@@ -106,8 +116,15 @@ export default {
     },
     countList() {
       if (this.list) {
-        this.listCount = this.list.length-1;
+        let diff = 0;
+        this.list.map((item) => {
+          if (item._id === this.selectedUser._id) diff = 1;
+        })
+        this.listCount = this.list.length ? this.list.length-diff : 0;
       }
+    },
+    resetCount() {
+      this.listCount = 0;
     }
   }
 }

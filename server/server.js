@@ -94,12 +94,16 @@ app.post('/filter', (req, res) => { // actual filter route
     }
   );
 
-  query.location = helpers.append_geo( // append query with geo point and range
-    { MIN: 30, MAX: 300 },
-    req.body.lng,
-    req.body.lat,
-    req.body.range
-  );
+  if (req.body.lng && req.body.lat) {
+    query.location = helpers.append_geo( // append query with geo point and range
+      { MIN: 30, MAX: 300 },
+      req.body.lng,
+      req.body.lat,
+      req.body.range
+    );
+  }
+
+console.log(query);
 
   Person.find(query).exec((error, list) => {
     if (error) res.status(400).json(error)

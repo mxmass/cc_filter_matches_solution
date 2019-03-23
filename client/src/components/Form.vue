@@ -21,7 +21,13 @@
               :label="`Added to favourites`"
             ></v-switch>
           </v-flex>
-          <v-flex xs12 sm12 d-flex pa50>
+          <v-flex
+            v-if="selectedUser._id"
+            xs12
+            sm12
+            d-flex
+            pa50
+          >
             <v-slider
               v-model="range"
               thumb-label="always"
@@ -84,7 +90,7 @@
 
 <script>
 export default {
-  props: ['count', 'switchMe'],
+  props: ['count', 'selectedUser', 'switchMe'],
   data() {
     return {
       age: [18, 95],

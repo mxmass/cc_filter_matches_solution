@@ -74,4 +74,9 @@ API calls delays simulated by setTimeout to make requests look realistic
 The only tricky part was to force loading different images from the same URI, solved
 using asyncComputed plugin that adds such a hook to the Vue instance lifecycle
 
-No tests yet (
+### Testing
+
+Unit tests checks elements renders
+```
+> ./web_test.sh
+```
